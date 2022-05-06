@@ -1,0 +1,95 @@
+<html lang="en-us">
+<head>
+  <meta charset="UTF-8" >
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+	<title>Matrix and Image Exploration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="styling.css">
+    
+</head>
+<body >
+
+    <div class="container">
+        <div class="row">
+          <div class="col-md-8">
+            <h2>About the Website</h2>
+            <div class="paragraph1"> <p class = "Summary"> This is a website was created to showcase a deep analysis into video game sales!
+
+            </p></div>
+         
+            <h2>Goal</h2>
+
+The goal of this project is to use data pulled from multiple sources in order to help us predict what factors are most influential to if a player feels positively or negatively about a game that they have purchased.
+The raw data was pulled using APIs from rawg.io and SteamSpy.
+Data evaluated includes genre, publisher, release date, box art colors, critical reception, where the game was available for purchase, copies sold, how many users finished the game, gaming platform, initial price, ESRB rating, and user playtime.
+ETL Process
+
+We began with a data set of over 100,000 games, but after some investigation, we shrunk our data set to about 27,000 games. In order to feed our data into a machine learning model, our data set needed extensive cleaning, including:
+
+<li>Merging Steam and Rawg data sets</li>
+<li>Dropping unnecessary columns</li>
+<li>Removing null values</li>
+<li>Calculating the total positive reviews for each game to find total positive reviews as a % to use as our target.</li>
+<li><Formatting release date column to proper datetime, and then split by release month. </li>
+<li>Declaring lists for each game to allow for each game to store its own unique data.</li>
+<li>Counting and sorting game tags to allow us to ascertain the 25 most popular tags to use as a feature.</li>
+<h2>Super Awesome Color Feature</h2>
+
+<li>Each API call from Rawg.io had a link to the respective games cover art</li>
+
+<li>Used a K-Means Classifier on each preprocessed image to cluster the dominant colors, then picked 5 dominant colors, which were returned as centroids. Two approaches were taken:</li>
+
+<li>Converted Centroids to color name such as “Green”, “Blue”, “Yellow/Brown” (5 columns)</li>
+<li>Used Actual RGB Values (15 columns)
+<li>Each was then added to the main data set as features, 1 categorical approach, and one numerical.</li>
+
+<li>This was very computationally intensive, taking around 9 hours to download, process, find centroids, and delete from local computer.</li>
+
+<h2>Machine Learning</h2>
+
+<li>Our target, seen in our data as “review_score” is a measure of what proportion of reviews for the game were positive (similar metric to rotten tomatoes). We had to prepare it by binning the proportion data, making it into categories of 1-5 and one hot encoding that result. This is important for machine learning processes, especially neural networks.</li>
+
+<h7>After splitting our data into testing and training sets we:</h7>
+
+<li>Ran a random search parameter hypertuner on a random forest classifier.
+Used the feature select from the forest to run a logisitic regression.
+Dropped low impact columns and created a deep neural network.<li>
+
+<h2>Reflection</h2>
+
+<li> results peaked at an accuracy of 32% for the logisitic regression and 27% for the neural network. An optimistic outlook sees that with 5 possible categories, our models did a good deal better than strictly wild guessing at a games review score.</li>
+
+<h7>We had some ideas on some contributing factors to our low results:</h7>
+
+<li>Although our initial data set was large with 100,000 games. These were quickly filtered out as they lacked proper documentation. By the time we merged with the verified games from the Steam API our data had been cut to below 30,000 games.</li>
+<li>A lot of our features were weak: what original platforms games were released on (some that are no longer in circulation such as Neo Geo or 3DO) or what genres or tags a game had (we found many games had a lot of arbitrary tags or some tags such as adventure or action that we overused).</li>
+
+
+
+
+            <h2>Tools and Libraries Used</h2>
+            <div class="Tools_List"> 
+
+              <li>Python</li>  
+              <li>Pandas</li> 
+              <li>Numpy</li>   
+              <li>CV2</li>  
+              <li>Tensorflow and Keras</li> 
+              <li>PIL</li>  
+              <li>Sklearn</li>  
+              <li>Html and CSS</li> 
+            
+            </div>
+            
+          </div>
+          <div class="row"></div>
+          
+    </div>   
+    
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+</body>
+</html>
